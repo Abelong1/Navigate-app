@@ -209,146 +209,6 @@ function BottomNav({ tab, setTab }) {
   );
 }
 
-/* ---- soft blob behind the mascot, like the onboarding illustrations ---- */
-function Blob({ color, size = 230, children }) {
-  return (
-    <div style={{ position: "relative", width: size, height: size * 0.92, display: "flex", alignItems: "center", justifyContent: "center" }}>
-      <svg viewBox="0 0 200 184" width={size} height={size * 0.92} style={{ position: "absolute", inset: 0 }}>
-        <path
-          d="M104 6c30 0 46 20 66 34s30 34 26 62-20 46-44 62-58 22-84 8S20 140 10 112 2 54 22 32 74 6 104 6z"
-          fill={color}
-        />
-      </svg>
-      <div style={{ position: "relative" }}>{children}</div>
-    </div>
-  );
-}
-
-/* ============================================================
-   ONBOARDING - shown once, then name + goal setup
-   ============================================================ */
-const GOALS = [
-  "Pass my CPE subjects",
-  "Review for exams",
-  "Build my own projects",
-  "Understand the basics",
-  "Just exploring",
-];
-
-function OnboardingScreen({ onDone, initialName }) {
-  const [step, setStep] = useState(0);
-  const [name, setName] = useState(initialName || "");
-  const [goal, setGoal] = useState(null);
-
-  const slides = [
-    null, // title slide is custom
-    { blob: "#F8C8DC", title: "Small steps build big circuits", sub: "One component, one gate, one conversion at a time." },
-    { blob: "#C9D3F2", title: "Learn the basics, then build", sub: "Your future engineer self starts with today's first step." },
-  ];
-
-  const primaryBtn = (label, onClick, disabled) => (
-    <button
-      onClick={onClick}
-      disabled={disabled}
-      style={{
-        width: "100%", border: "none", borderRadius: 12, padding: "15px 0",
-        background: disabled ? "#C9B6EE" : PURPLE, color: "#FFFFFF",
-        fontSize: 14.5, fontWeight: 600, cursor: disabled ? "default" : "pointer",
-      }}
-    >
-      {label}
-    </button>
-  );
-
-  const dots = (
-    <div style={{ display: "flex", gap: 6, justifyContent: "center" }}>
-      {[0, 1, 2].map((i) => (
-        <span key={i} style={{ width: i === step ? 16 : 6, height: 6, borderRadius: 3, background: i === step ? PURPLE : "#D9D3E6", transition: "width .2s" }} />
-      ))}
-    </div>
-  );
-
-  let content;
-  if (step === 0) {
-    content = (
-      <div style={{ flex: 1, display: "flex", flexDirection: "column", background: "linear-gradient(180deg,#FFFFFF 45%,#EFE6FD 100%)" }}>
-        <div style={{ padding: "64px 28px 0" }}>
-          <div style={{ fontSize: 44, fontWeight: 800, letterSpacing: -1, color: "#111111" }}>NaviGate</div>
-          <div style={{ fontSize: 15, color: "#333", marginTop: 8, maxWidth: 240, lineHeight: 1.45 }}>
-            Your pocket guide to the fundamentals of Computer Engineering.
-          </div>
-        </div>
-        <div style={{ flex: 1, display: "flex", alignItems: "flex-end", justifyContent: "center" }}>
-          <Blob color="#E2D4FB" size={290}>
-            <img src={CHICK_IMG} alt="NaviGate chick mascot" style={{ width: 210, height: 210, objectFit: "contain" }} />
-          </Blob>
-        </div>
-      </div>
-    );
-  } else if (step <= 2) {
-    const s = slides[step];
-    content = (
-      <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "0 28px", textAlign: "center", gap: 28 }}>
-        <Blob color={s.blob}>
-          <img src={step === 1 ? CHICKY_AVATAR_IMG : EAGLE_AVATAR_IMG} alt="" style={{ width: 130, height: 130, objectFit: "cover", borderRadius: "50%" }} />
-        </Blob>
-        <div>
-          <div style={{ fontSize: 22, fontWeight: 600, color: "#111111", lineHeight: 1.3 }}>{s.title}</div>
-          <div style={{ fontSize: 13, color: "#555", marginTop: 10, lineHeight: 1.5 }}>{s.sub}</div>
-        </div>
-      </div>
-    );
-  } else {
-    content = (
-      <div style={{ flex: 1, overflowY: "auto", padding: "40px 24px 24px", display: "flex", flexDirection: "column", gap: 12 }}>
-        <div style={{ display: "flex", justifyContent: "center", marginBottom: 6 }}>
-          <div style={{ width: 92, height: 92, borderRadius: "50%", background: "#9FE3DE", overflow: "hidden" }}>
-            <img src={DUCK_AVATAR_IMG} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-          </div>
-        </div>
-        <div style={{ fontSize: 22, fontWeight: 600, color: "#111", textAlign: "center", marginBottom: 6 }}>Let's get you set up</div>
-        <input
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="What should we call you?"
-          style={{ border: "none", background: "#F3F2F7", borderRadius: 10, padding: "14px 14px", fontSize: 14, outline: "none", fontFamily: FONT }}
-        />
-        <div style={{ fontSize: 14, fontWeight: 600, color: "#111", marginTop: 10 }}>What's your goal?</div>
-        {GOALS.map((g) => (
-          <button
-            key={g}
-            onClick={() => setGoal(g)}
-            style={{
-              textAlign: "left", border: goal === g ? `1.5px solid ${PURPLE}` : "1.5px solid transparent",
-              background: goal === g ? "#F1EAFE" : "#F3F2F7", borderRadius: 10, padding: "13px 14px",
-              fontSize: 13, color: "#222", cursor: "pointer", fontFamily: FONT,
-            }}
-          >
-            {g}
-          </button>
-        ))}
-      </div>
-    );
-  }
-
-  return (
-    <div style={{ flex: 1, display: "flex", flexDirection: "column", background: "#FFFFFF", minHeight: 0 }}>
-      {step < 3 && (
-        <div style={{ display: "flex", justifyContent: "flex-end", padding: "14px 20px 0" }}>
-          <button onClick={() => setStep(3)} style={{ border: "none", background: "transparent", color: "#777", fontSize: 13, cursor: "pointer" }}>Skip</button>
-        </div>
-      )}
-      {content}
-      <div style={{ padding: "16px 24px calc(22px + env(safe-area-inset-bottom))", display: "flex", flexDirection: "column", gap: 16 }}>
-        {step < 3 && dots}
-        {step < 3
-          ? primaryBtn(step === 0 ? "Get started" : "Next", () => setStep(step + 1))
-          : primaryBtn("Continue", () => onDone({ name: name.trim() || "Future engineer", goal }), !name.trim())}
-      </div>
-    </div>
-  );
-}
-
 /* ============================================================
    HOME SCREEN
    ============================================================ */
@@ -2632,22 +2492,21 @@ function loadUser() {
 
 export default function App() {
   const saved = useMemo(loadUser, []);
-  const [onboarded, setOnboarded] = useState(!!saved?.onboarded);
   const [tab, setTabRaw] = useState("home");
   const [showProfile, setShowProfile] = useState(false);
   const [userName, setUserName] = useState(saved?.name || "Future engineer");
   const [avatarId, setAvatarId] = useState(saved?.avatarId || null);
-  const [goal, setGoal] = useState(saved?.goal || null);
+  const [goal] = useState(saved?.goal || null);
   const [visited, setVisited] = useState(saved?.visited || {});
   const avatarImg = AVATARS.find((a) => a.id === avatarId)?.img || null;
 
   useEffect(() => {
     try {
-      localStorage.setItem(STORE_KEY, JSON.stringify({ onboarded, name: userName, avatarId, goal, visited }));
+      localStorage.setItem(STORE_KEY, JSON.stringify({ name: userName, avatarId, goal, visited }));
     } catch (e) {
       // storage unavailable - settings just won't persist
     }
-  }, [onboarded, userName, avatarId, goal, visited]);
+  }, [userName, avatarId, goal, visited]);
 
   const setTab = (t) => {
     if (SECTION_CARDS.some((sc) => sc.key === t)) setVisited((v) => (v[t] ? v : { ...v, [t]: true }));
@@ -2656,14 +2515,7 @@ export default function App() {
   };
 
   let body;
-  if (!onboarded) {
-    body = (
-      <OnboardingScreen
-        initialName={saved?.name || ""}
-        onDone={({ name, goal: g }) => { setUserName(name); setGoal(g); setOnboarded(true); }}
-      />
-    );
-  } else if (showProfile) {
+  if (showProfile) {
     body = (
       <ProfileScreen
         userName={userName}
@@ -2706,7 +2558,7 @@ export default function App() {
       >
         {body}
 
-        {onboarded && <BottomNav tab={showProfile ? "" : tab} setTab={setTab} />}
+        <BottomNav tab={showProfile ? "" : tab} setTab={setTab} />
       </div>
     </div>
   );

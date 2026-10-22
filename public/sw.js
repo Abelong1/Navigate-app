@@ -1,5 +1,5 @@
 // Offline cache: app shell + built assets; network refreshes the cache in the background.
-const CACHE = "navigate-app-v2";
+const CACHE = "navigate-app-v3";
 self.addEventListener("install", (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(["/", "/index.html", "/manifest.json", "/icon-192.png", "/icon-512.png"])));
   self.skipWaiting();
