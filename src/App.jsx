@@ -205,7 +205,7 @@ function BottomNav({ tab, setTab }) {
       style={{
         position: "absolute", bottom: 0, left: 0, right: 0,
         display: "flex", justifyContent: "space-around", alignItems: "center",
-        padding: "10px 18px 24px", background: "#FEFBE8",
+        padding: "10px 18px calc(16px + env(safe-area-inset-bottom))", background: "#FEFBE8",
         borderTop: "1px solid #FFE988", zIndex: 5,
       }}
     >
@@ -410,7 +410,7 @@ function HomeScreen({ tab, setTab, userName, avatarImg, onOpenProfile }) {
         </div>
 
         {/* Feature grid - no numbers, icon led */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginTop: 14, paddingBottom: 116 }}>
+        <div className="ng-modgrid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginTop: 14, paddingBottom: 116 }}>
           {FEATURES.map((f) => {
             const Icon = f.icon;
             return (
@@ -2635,8 +2635,9 @@ export default function App() {
   }
 
   return (
-    <div style={{ minHeight: "100vh", background: "#FFF3B0", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: FONT }}>
+    <div className="ng-root" style={{ minHeight: "100vh", background: "#FFF3B0", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: FONT }}>
       <div
+        className="ng-frame"
         style={{
           width: 380, height: 800,
           background: "#FEFBE8",
